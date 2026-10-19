@@ -7,7 +7,7 @@ receive, inside your n8n workflows.
 Every invoice Invoir generates is checked against the official rules (KoSIT, EN 16931 and Peppol
 Schematron, PDF/A-3) before you get it, so what you send is what tax offices and public buyers accept.
 
-![Create Invoice in n8n](https://raw.githubusercontent.com/invoir-dev/n8n-nodes-invoir/main/docs/create-invoice.png)
+![Create Invoice in n8n](https://raw.githubusercontent.com/invoir-dev/n8n-nodes-invoir/main/.github/images/create-invoice.png)
 
 [Installation](#installation) · [Credentials](#credentials) · [Operations](#operations) ·
 [Example workflow](#example-workflow) · [Errors](#errors) · [Compatibility](#compatibility) ·
@@ -73,7 +73,7 @@ Import from File**), pick your Invoir credential, and run it:
    the binary field `pdf`.
 3. **Send Email** (or Gmail / Outlook) with *Attachments* set to `pdf`.
 
-![Workflow](https://raw.githubusercontent.com/invoir-dev/n8n-nodes-invoir/main/docs/workflow.png)
+![Workflow](https://raw.githubusercontent.com/invoir-dev/n8n-nodes-invoir/main/.github/images/workflow.png)
 
 To check incoming e-invoices: **Email Trigger (IMAP)** with attachments → **Invoir → E-Invoice File →
 Validate** (Input Binary Field `attachment_0`) → **If** `{{ $json.valid }}`.
