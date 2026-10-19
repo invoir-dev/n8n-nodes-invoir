@@ -1,0 +1,18 @@
+{
+	"node": "@invoir/n8n-nodes-invoir.invoir",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Finance & Accounting"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/invoir-dev/n8n-nodes-invoir?tab=readme-ov-file#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/invoir-dev/n8n-nodes-invoir?tab=readme-ov-file"
+			}
+		]
+	}
+}

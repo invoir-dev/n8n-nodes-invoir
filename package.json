@@ -1,0 +1,68 @@
+{
+  "name": "@invoir/n8n-nodes-invoir",
+  "version": "0.1.0",
+  "description": "n8n node for Invoir: generate and validate EU e-invoices (Factur-X, ZUGFeRD, XRechnung, Peppol BIS) as PDF/A-3 and XML",
+  "license": "MIT",
+  "homepage": "https://invoir.dev/integrations#n8n",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "invoir",
+    "e-invoice",
+    "e-invoicing",
+    "factur-x",
+    "zugferd",
+    "xrechnung",
+    "peppol",
+    "en16931",
+    "invoice"
+  ],
+  "author": {
+    "name": "Invoir",
+    "email": "hello@invoir.dev",
+    "url": "https://invoir.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/invoir-dev/n8n-nodes-invoir.git"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/InvoirApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Invoir/Invoir.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^21.1.0",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/invoir-dev/n8n-nodes-invoir/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

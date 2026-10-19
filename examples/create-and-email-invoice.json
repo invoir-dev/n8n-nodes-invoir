@@ -1,0 +1,131 @@
+{
+  "name": "Invoir: create an e-invoice and email it",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6b0c7a52-3c1e-4c55-9d1e-1a2b3c4d5e01"
+    },
+    {
+      "parameters": {
+        "profile": "factur-x",
+        "invoiceNumber": "RE-2026-0042",
+        "sellerName": "Musterbau GmbH",
+        "sellerDetails": {
+          "vatId": "DE123456789",
+          "street": "Industriestraße 12",
+          "postalCode": "80331",
+          "city": "München",
+          "country": "DE",
+          "contactName": "Erika Mustermann",
+          "email": "rechnung@musterbau.example",
+          "phone": "+49 89 1234560"
+        },
+        "buyerName": "Beispiel AG",
+        "buyerDetails": {
+          "vatId": "DE987654321",
+          "street": "Hauptstraße 1",
+          "postalCode": "10115",
+          "city": "Berlin",
+          "country": "DE",
+          "email": "buchhaltung@beispiel.example"
+        },
+        "lineItems": {
+          "item": [
+            {
+              "description": "Beratung Softwarearchitektur",
+              "quantity": 12.5,
+              "unit": "HUR",
+              "unitPrice": 140,
+              "vatRate": 19
+            },
+            {
+              "description": "Fachbuch",
+              "quantity": 3,
+              "unit": "C62",
+              "unitPrice": 39.9,
+              "vatRate": 7
+            }
+          ]
+        },
+        "additionalFields": {
+          "language": "de",
+          "paymentIban": "DE89370400440532013000",
+          "paymentBic": "COBADEFFXXX",
+          "paymentReference": "RE-2026-0042",
+          "paymentTerms": "Zahlbar innerhalb von 30 Tagen ohne Abzug."
+        },
+        "options": {
+          "idempotencyKey": "RE-2026-0042"
+        }
+      },
+      "name": "Create Factur-X invoice",
+      "type": "@invoir/n8n-nodes-invoir.invoir",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "6b0c7a52-3c1e-4c55-9d1e-1a2b3c4d5e02",
+      "credentials": {
+        "invoirApi": {
+          "id": "",
+          "name": "Invoir account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "rechnung@musterbau.example",
+        "toEmail": "buchhaltung@beispiel.example",
+        "subject": "=Rechnung {{ $json.number }}",
+        "emailFormat": "text",
+        "text": "=Guten Tag,\n\nanbei unsere Rechnung {{ $json.number }} über {{ $json.totals.due }} {{ $json.totals.currency }} als ZUGFeRD/Factur-X-PDF.\n\nMit freundlichen Grüßen\nMusterbau GmbH",
+        "options": {
+          "attachments": "pdf"
+        }
+      },
+      "name": "Send email with the PDF",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "6b0c7a52-3c1e-4c55-9d1e-1a2b3c4d5e03"
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [
+        [
+          {
+            "node": "Create Factur-X invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Factur-X invoice": {
+      "main": [
+        [
+          {
+            "node": "Send email with the PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
