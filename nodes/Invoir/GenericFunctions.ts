@@ -71,8 +71,9 @@ function apiError(ctx: Context, response: FullResponse, itemIndex: number): Node
 	const body = toObject(response.body);
 	const status = response.statusCode;
 	const code = typeof body.error === 'string' ? body.error : `http_${status}`;
-	const message =
-		typeof body.message === 'string' ? body.message : `Invoir answered HTTP ${status}`;
+	const message = readable(
+		typeof body.message === 'string' ? body.message : `Invoir answered HTTP ${status}`,
+	);
 	const details: string[] = [];
 
 	for (const e of (body.errors as IDataObject[] | undefined) ?? []) {
@@ -107,6 +108,13 @@ function apiError(ctx: Context, response: FullResponse, itemIndex: number): Node
 		httpCode: String(status),
 		itemIndex,
 	});
+}
+
+/** The API's messages point at JSON paths ("see errors[]"); here the details are listed below them. */
+function readable(message: string): string {
+	return message
+		.replace('; see errors[].', '.')
+		.replace(' named in validation.checks[].findings[]', ' listed below');
 }
 
 /** All findings of a validation report in one flat list, each with the name of its check. */
