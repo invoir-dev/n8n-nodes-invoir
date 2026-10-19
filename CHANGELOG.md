@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-10-19)
 
 - Invoice: Create (fields or invoice JSON, PDF and XML as binary) and Get.
 - E-Invoice File: Validate and Extract XML.
