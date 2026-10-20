@@ -454,6 +454,7 @@ export const invoiceFields: INodeProperties[] = [
 				name: 'dueDate',
 				type: 'dateTime',
 				default: '',
+				description: 'E-invoices need a due date or Payment Terms when an amount is due',
 			},
 			{
 				displayName: 'Include PDF',

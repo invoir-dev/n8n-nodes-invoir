@@ -1,6 +1,6 @@
 {
   "name": "@invoir/n8n-nodes-invoir",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n node for Invoir: generate and validate EU e-invoices (Factur-X, ZUGFeRD, XRechnung, Peppol BIS) as PDF/A-3 and XML",
   "license": "MIT",
   "homepage": "https://invoir.dev/integrations#n8n",

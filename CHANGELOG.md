@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (2026-10-20)
+
+- Invoice: Create explains that e-invoices need a due date or payment terms when an amount is due
+  (the API now answers 400 without either, rule BR-CO-25).
+
 ## 0.1.0 (2026-10-19)
 
 - Invoice: Create (fields or invoice JSON, PDF and XML as binary) and Get.
