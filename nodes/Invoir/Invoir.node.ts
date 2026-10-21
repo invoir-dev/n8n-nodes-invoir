@@ -23,11 +23,11 @@ import {
 import { invoiceFields, invoiceOperations } from './InvoiceDescription';
 
 /**
- * Invoir: generate and validate EU e-invoices (Factur-X, ZUGFeRD, XRechnung, Peppol BIS).
+ * Invoir: generate, validate and read EU e-invoices (Factur-X, ZUGFeRD, XRechnung, Peppol BIS).
  *
  * Programmatic style rather than declarative, because Create and Get make dependent calls
- * (the invoice, then its PDF and XML as binary data) and Validate / Extract upload a binary
- * file as multipart. Every request goes through invoirRequest (GenericFunctions.ts).
+ * (the invoice, then its PDF and XML as binary data) and Validate / Parse / Extract upload a
+ * binary file as multipart. Every request goes through invoirRequest (GenericFunctions.ts).
  */
 export class Invoir implements INodeType {
 	description: INodeTypeDescription = {
@@ -37,7 +37,8 @@ export class Invoir implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: 'Generate and validate EU e-invoices: Factur-X, ZUGFeRD, XRechnung, Peppol BIS',
+		description:
+			'Generate, validate and read EU e-invoices: Factur-X, ZUGFeRD, XRechnung, Peppol BIS',
 		defaults: {
 			name: 'Invoir',
 		},
@@ -96,6 +97,8 @@ export class Invoir implements INodeType {
 					returnData.push(await getInvoice(this, i));
 				} else if (resource === 'eInvoice' && operation === 'validate') {
 					returnData.push(await validate(this, i, items[i]));
+				} else if (resource === 'eInvoice' && operation === 'parse') {
+					returnData.push(await parse(this, i, items[i]));
 				} else if (resource === 'eInvoice' && operation === 'extractXml') {
 					returnData.push(await extractXml(this, i));
 				} else {
@@ -199,6 +202,28 @@ async function validate(
 	const report = await upload(ctx, i, '/validate');
 	return {
 		json: { valid: report.status === 'valid', ...report, findings: findings(report) },
+		binary: input.binary,
+		pairedItem: { item: i },
+	};
+}
+
+/**
+ * POST /parse: a received e-invoice as the invoice JSON of Create (json.invoice), the totals as the
+ * document states them, unmapped values, warnings and the validation report. An invalid invoice is
+ * still read; valid and findings are added as in Validate. The file stays on the output item.
+ */
+async function parse(
+	ctx: IExecuteFunctions,
+	i: number,
+	input: INodeExecutionData,
+): Promise<INodeExecutionData> {
+	const result = await upload(ctx, i, '/parse');
+	return {
+		json: {
+			valid: result.status === 'valid',
+			...result,
+			findings: findings(result.validation as IDataObject | undefined),
+		},
 		binary: input.binary,
 		pairedItem: { item: i },
 	};

@@ -1,8 +1,8 @@
 # @invoir/n8n-nodes-invoir
 
 An [n8n](https://n8n.io/) community node for [Invoir](https://invoir.dev): turn invoice data into a
-compliant EU e-invoice (Factur-X, ZUGFeRD, XRechnung, Peppol BIS), and validate the e-invoices you
-receive, inside your n8n workflows.
+compliant EU e-invoice (Factur-X, ZUGFeRD, XRechnung, Peppol BIS), and validate and read the
+e-invoices you receive, inside your n8n workflows.
 
 Every invoice Invoir generates is checked against the official rules (KoSIT, EN 16931 and Peppol
 Schematron, PDF/A-3) before you get it, so what you send is what tax offices and public buyers accept.
@@ -37,6 +37,7 @@ The package has no dependencies besides n8n itself.
 | Invoice | **Create** | Generates the e-invoice from fields or from invoice JSON. Output: the API answer (ID, totals, validation report) plus the PDF and XML as binary fields `pdf` and `xml`. |
 | Invoice | **Get** | The same answer and files again for an invoice ID (kept 90 days, test documents 24 hours). |
 | E-Invoice File | **Validate** | Checks a PDF or XML from a binary field against the official rules. Output: `valid` (true/false), `status`, `errors`, `warnings`, and `findings` (rule, message, location) as a flat list. |
+| E-Invoice File | **Parse** | Reads a received e-invoice (XML, or a Factur-X / ZUGFeRD PDF) from a binary field. Output: `invoice` in the same JSON as Create takes (number, dates, seller, buyer, lines, payment, references), `totals` as the document states them, `unmapped` (every value that JSON has no field for), reading `warnings`, and the validation result (`valid`, `status`, `findings`, `validation`). |
 | E-Invoice File | **Extract XML** | The XML inside a Factur-X / ZUGFeRD PDF, as text and as a binary `xml` field. |
 
 **Profiles** (Create): Factur-X and ZUGFeRD (PDF/A-3 with the XML embedded; France and Germany),
@@ -78,6 +79,12 @@ Import from File**), pick your Invoir credential, and run it:
 To check incoming e-invoices: **Email Trigger (IMAP)** with attachments → **Invoir → E-Invoice File →
 Validate** (Input Binary Field `attachment_0`) → **If** `{{ $json.valid }}`.
 
+To book them: **Email Trigger (IMAP)** → **Invoir → E-Invoice File → Parse** (Input Binary Field
+`attachment_0`) → **Google Sheets** or your accounting system, mapping e.g.
+`{{ $json.invoice.number }}`, `{{ $json.invoice.seller.name }}`, `{{ $json.invoice.seller.vatId }}`,
+`{{ $json.totals.due }}` and `{{ $json.invoice.currency }}`. An invalid invoice is still read, so an
+**If** on `{{ $json.valid }}` can send the findings back to the supplier.
+
 ## Errors
 
 The node shows Invoir's own explanation, so you can fix the input in one go:
@@ -88,6 +95,8 @@ The node shows Invoir's own explanation, so you can fix the input in one go:
   IDs and messages are listed. Nothing was stored or counted.
 - **401**: the API key is wrong or revoked. **429 quota_exceeded**: the free plan's 25 documents for
   the month are used up; upgrade in the dashboard or use a test key while building.
+- **422 not_an_invoice / invalid_xml / unsupported_syntax** (Parse): the file holds no invoice to
+  read (a PDF without invoice XML, a file that isn't XML, ZUGFeRD 1.0). Not counted.
 - **503 busy**: Invoir was busy for 30 seconds; turn on **Retry On Fail** in the node settings.
 
 With **On Error → Continue** the item carries `error` and `details` instead of stopping the workflow.
@@ -106,6 +115,7 @@ Built with the n8n node CLI and tested on n8n 2.43.8 (self-hosted). Needs n8n 1.
 
 ## Version history
 
+- **Unreleased**: E-Invoice File → Parse.
 - **0.1.0**: first release. Invoice Create and Get, E-Invoice File Validate and Extract XML.
 
 ## Development

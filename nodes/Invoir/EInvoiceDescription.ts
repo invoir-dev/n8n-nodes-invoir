@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-// E-Invoice > Validate (POST /api/v1/validate) and E-Invoice > Extract XML (POST /api/v1/extract).
-// Both upload one file from a binary field of the incoming item.
+// E-Invoice > Validate (POST /api/v1/validate), Parse (POST /api/v1/parse) and Extract XML
+// (POST /api/v1/extract). Each uploads one file from a binary field of the incoming item.
 
 export const eInvoiceOperations: INodeProperties[] = [
 	{
@@ -16,6 +16,13 @@ export const eInvoiceOperations: INodeProperties[] = [
 				value: 'extractXml',
 				description: 'Get the XML embedded in a Factur-X / ZUGFeRD PDF',
 				action: 'Extract the embedded invoice',
+			},
+			{
+				name: 'Parse',
+				value: 'parse',
+				description:
+					'Read a received e-invoice (XML, or a Factur-X / ZUGFeRD PDF) into invoice data: seller, buyer, line items and totals',
+				action: 'Parse an invoice file',
 			},
 			{
 				name: 'Validate',

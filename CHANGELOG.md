@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- E-Invoice File: Parse reads a received e-invoice (XML, or a Factur-X / ZUGFeRD PDF) into the invoice
+  JSON of Create, with the stated totals, unmapped values, warnings and the validation result
+  (POST /api/v1/parse).
+
 ## 0.1.1 (2026-10-20)
 
 - Invoice: Create explains that e-invoices need a due date or payment terms when an amount is due
