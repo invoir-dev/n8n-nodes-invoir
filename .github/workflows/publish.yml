@@ -97,3 +97,9 @@ jobs:
           npm run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Show why the npm login failed
+        # npm logs the trusted-publishing (OIDC) token exchange only at verbose level, in its debug
+        # log; the registry's message says which part of the trusted publisher didn't match.
+        if: failure()
+        run: grep -h oidc ~/.npm/_logs/*-debug-*.log || true
