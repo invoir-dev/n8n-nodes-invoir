@@ -15,9 +15,15 @@ Schematron, PDF/A-3) before you get it, so what you send is what tax offices and
 
 ## Installation
 
-In n8n: **Settings → Community Nodes → Install**, enter `@invoir/n8n-nodes-invoir`, accept the risk
-note and install. Self-hosted n8n can also run `npm install @invoir/n8n-nodes-invoir` in
-`~/.n8n/nodes`. See the n8n [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/).
+Invoir is a verified community node, so it installs from the nodes panel, on n8n Cloud and on
+self-hosted n8n: open a workflow, click **+**, search for **Invoir**, select it under **More from the
+community** and click **Install**. Only the instance owner or an admin can install it; after that,
+everyone on the instance can use it.
+
+Self-hosted n8n can also install it from npm: **Settings → Community Nodes → Install**, enter
+`@invoir/n8n-nodes-invoir`, accept the risk note and install, or run
+`npm install @invoir/n8n-nodes-invoir` in `~/.n8n/nodes`. See the n8n
+[community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/).
 
 The package has no dependencies besides n8n itself.
 
@@ -27,7 +33,8 @@ The package has no dependencies besides n8n itself.
    your email, click the link, copy the key. The free plan includes 25 documents a month, no card.
 2. In the [dashboard](https://validate.invoir.dev/dashboard), create a **test key** (`inv_test_…`)
    too. Test documents are identical but watermarked, never count against your quota and are deleted
-   after 24 hours, so build and try your workflow with it, then switch to the live key.
+   after 24 hours; a test key makes 25 calls a day. Build and try your workflow with it, then switch
+   to the live key.
 3. In n8n, add an **Invoir API** credential and paste the key. n8n checks it with a free call.
 
 ## Operations
@@ -94,7 +101,8 @@ The node shows Invoir's own explanation, so you can fix the input in one go:
 - **422 invoice_invalid**: the document was generated but the official rules rejected it; the rule
   IDs and messages are listed. Nothing was stored or counted.
 - **401**: the API key is wrong or revoked. **429 quota_exceeded**: the free plan's 25 documents for
-  the month are used up; upgrade in the dashboard or use a test key while building.
+  the month are used up; upgrade in the dashboard. **429 test_limit_exceeded**: the test key's 25
+  calls for the day are used up; they start again at midnight UTC.
 - **422 not_an_invoice / invalid_xml / unsupported_syntax** (Parse): the file holds no invoice to
   read (a PDF without invoice XML, a file that isn't XML, ZUGFeRD 1.0). Not counted.
 - **503 busy**: Invoir was busy for 30 seconds; turn on **Retry On Fail** in the node settings.
@@ -115,7 +123,8 @@ Built with the n8n node CLI and tested on n8n 2.43.8 (self-hosted). Needs n8n 1.
 
 ## Version history
 
-- **Unreleased**: E-Invoice File → Parse.
+- **0.2.0**: E-Invoice File → Parse.
+- **0.1.1**: Invoice → Create explains that e-invoices need a due date or payment terms.
 - **0.1.0**: first release. Invoice Create and Get, E-Invoice File Validate and Extract XML.
 
 ## Development

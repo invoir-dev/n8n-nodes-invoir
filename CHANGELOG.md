@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 (2026-10-23)
 
 - E-Invoice File: Parse reads a received e-invoice (XML, or a Factur-X / ZUGFeRD PDF) into the invoice
   JSON of Create, with the stated totals, unmapped values, warnings and the validation result
   (POST /api/v1/parse).
+- The 429 quota_exceeded hint mentions that a test key makes 25 calls a day.
+- README: install from the nodes panel (verified community node, n8n Cloud and self-hosted).
 
 ## 0.1.1 (2026-10-20)
 

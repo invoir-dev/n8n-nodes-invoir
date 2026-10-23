@@ -92,7 +92,7 @@ function apiError(ctx: Context, response: FullResponse, itemIndex: number): Node
 	if (code === 'quota_exceeded') {
 		const reset = response.headers['x-quota-reset'];
 		details.push(
-			`The month's documents are used up${reset ? ` until ${reset}` : ''}. Upgrade at https://validate.invoir.dev/dashboard/billing, or build with a test key (inv_test_...): test documents never count.`,
+			`The month's documents are used up${reset ? ` until ${reset}` : ''}. Upgrade at https://validate.invoir.dev/dashboard/billing. While building, use a test key (inv_test_...): its 25 calls a day never count against the month.`,
 		);
 	}
 	if (code === 'busy') {
